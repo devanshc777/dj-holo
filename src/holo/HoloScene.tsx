@@ -88,13 +88,13 @@ function DeckDisc({ deck }: { deck: DeckId }) {
       position={[x, 0, 0]}
       onClick={() => dispatchControl({ type: 'deck', deck, action: 'toggle' })}
     >
-      <mesh material={mat} rotation={[Math.PI / 2, 0, 0]}>
+      <mesh material={mat}>
         <cylinderGeometry args={[1.3, 1.3, 0.08, 64, 1, true]} />
       </mesh>
-      <mesh material={mat} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh material={mat} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <circleGeometry args={[1.3, 64]} />
       </mesh>
-      <mesh material={ringMat} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh material={ringMat} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[1.5, 0.02, 8, 96]} />
       </mesh>
     </group>
