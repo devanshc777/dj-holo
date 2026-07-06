@@ -2,7 +2,7 @@
 export type DeckId = 0 | 1;
 
 export type ControlEvent =
-  | { type: 'deck'; deck: DeckId; action: 'play' | 'pause' | 'toggle' | 'cue' | 'sync' | 'seek'; value?: number }
+  | { type: 'deck'; deck: DeckId; action: 'play' | 'pause' | 'toggle' | 'cue' | 'sync' | 'seek' | 'brake' | 'backspin' | 'echoOut'; value?: number }
   | { type: 'param'; deck: DeckId; param: 'tempo' | 'volume' | 'eqLow' | 'eqMid' | 'eqHigh' | 'fxWet' | 'filter'; value: number }
   | { type: 'mixer'; param: 'crossfade' | 'master'; value: number }
   | { type: 'loop'; deck: DeckId; beats: 1 | 2 | 4 | 8 | null }

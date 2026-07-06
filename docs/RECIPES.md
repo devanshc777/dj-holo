@@ -17,8 +17,12 @@ Prep for all: both decks loaded, incoming deck synced (`E`/`I`).
 
 Phrase math: 4 beats = bar; phrases run 8/16/32 bars; land your moves on phrase boundaries.
 
-## Feature gaps these expose (extension queue)
+## Exit FX (built 2026-07-06 — one button each)
 
-- One-button **echo-out exit** (freeze delay tail + kill dry) — currently manual FX+volume.
-- **Vinyl brake** effect (playbackRate ramp to 0).
-- **Backspin** effect (fast reverse burst — BufferSource can't play negative rate; needs reversed-buffer trick).
+| Exit | Key (A / B) | What happens |
+|---|---|---|
+| Echo out | `A` / `J` | dry cut instantly, delay tail rings ~3.5s, feedback auto-relaxes |
+| Vinyl brake | `S` / `K` | speed ramps to 0 over 1.5s, deck ends paused where it coasted |
+| Backspin | `D` / `L` | fast reversed burst (~1.2s), deck lands paused at its cue point |
+
+Update the recipes above: "echo out" row = just press `A`/`J` at the phrase end, then start the other deck on the tail.

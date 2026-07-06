@@ -29,6 +29,7 @@ export class Deck {
   private startedAt = 0; // ctx.currentTime at last start
   private cuePoint = 0;
   private loopStart = 0;
+  private reversed: AudioBuffer | null = null; // lazy cache for backspin
 
   constructor(ctx: AudioContext, output: AudioNode) {
     this.ctx = ctx;
@@ -62,6 +63,7 @@ export class Deck {
   load(buffer: AudioBuffer, bpm: number | null) {
     this.stopSource();
     this.buffer = buffer;
+    this.reversed = null;
     this.bpm = bpm;
     this.fx.setBpm(bpm);
     this.playing = false;
@@ -176,6 +178,57 @@ export class Deck {
     this.hotCues[slot] = null;
   }
 
+  /** Vinyl brake: ramp speed to zero over `seconds`, end paused where it coasted to. */
+  brake(seconds = 1.5) {
+    if (!this.source || !this.playing) return;
+    const startPos = this.playhead();
+    const rate = this.effectiveRate();
+    this.source.playbackRate.cancelScheduledValues(this.ctx.currentTime);
+    this.source.playbackRate.setValueAtTime(rate, this.ctx.currentTime);
+    this.source.playbackRate.linearRampToValueAtTime(0, this.ctx.currentTime + seconds);
+    setTimeout(() => {
+      this.stopSource();
+      this.playing = false;
+      // linear ramp covers half the distance a constant rate would
+      this.offset = Math.min(this.duration(), startPos + (rate * seconds) / 2);
+    }, seconds * 1000);
+  }
+
+  /** Backspin: fast reversed burst from the current position, land paused at the cue point. */
+  backspin(seconds = 1.2) {
+    if (!this.buffer || !this.playing) return;
+    const pos = this.playhead();
+    this.stopSource();
+    if (!this.reversed) this.reversed = this.reverseBuffer(this.buffer);
+    const src = this.ctx.createBufferSource();
+    src.buffer = this.reversed;
+    src.playbackRate.value = 2.5;
+    src.connect(this.eq.low);
+    src.start(0, Math.max(0, this.buffer.duration - pos));
+    this.source = src;
+    setTimeout(() => {
+      this.stopSource();
+      this.playing = false;
+      this.offset = this.cuePoint;
+    }, seconds * 1000);
+  }
+
+  /** Echo out: cut the dry signal, let the delay tail ring, relax feedback after. */
+  echoOut(tailSeconds = 3.5) {
+    if (!this.playing) return;
+    this.fx.setWet(1);
+    this.fx.setFeedback(0.85);
+    this.pause();
+    setTimeout(() => {
+      this.fx.setFeedback(0.35);
+      this.fx.setWet(0);
+    }, tailSeconds * 1000);
+  }
+
+  fxFeedbackValue() {
+    return this.fx.feedbackValue();
+  }
+
   duration() {
     return this.buffer?.duration ?? 0;
   }
@@ -193,6 +246,16 @@ export class Deck {
   private playheadRaw() {
     if (!this.playing) return this.offset;
     return this.offset + (this.ctx.currentTime - this.startedAt) * this.effectiveRate();
+  }
+
+  private reverseBuffer(buffer: AudioBuffer): AudioBuffer {
+    const rev = this.ctx.createBuffer(buffer.numberOfChannels, buffer.length, buffer.sampleRate);
+    for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+      const from = buffer.getChannelData(ch);
+      const to = rev.getChannelData(ch);
+      for (let i = 0, n = from.length; i < n; i++) to[i] = from[n - 1 - i];
+    }
+    return rev;
   }
 
   private startSource(offset: number) {

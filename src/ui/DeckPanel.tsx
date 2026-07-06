@@ -78,6 +78,15 @@ export function DeckPanel({ deck }: { deck: DeckId }) {
           fx
           <input type="range" min={0} max={1} step={0.001} value={d.fxWet} onChange={set('fxWet')} />
         </label>
+        <button className="exit-fx" title="echo out" onClick={() => dispatchControl({ type: 'deck', deck, action: 'echoOut' })}>
+          ECHO
+        </button>
+        <button className="exit-fx" title="vinyl brake" onClick={() => dispatchControl({ type: 'deck', deck, action: 'brake' })}>
+          BRK
+        </button>
+        <button className="exit-fx" title="backspin" onClick={() => dispatchControl({ type: 'deck', deck, action: 'backspin' })}>
+          SPIN
+        </button>
       </div>
 
       <div className="row pads">

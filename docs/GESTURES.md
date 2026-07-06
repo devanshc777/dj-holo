@@ -45,6 +45,7 @@ Handedness decides the deck: **left hand → Deck A, right hand → Deck B** (mi
 | `R` / `T` | Deck A loop 4 / off | `Y` / `U` | Deck B loop 4 / off |
 | `Z` / `X` | crossfader nudge left/right | `Space` | record start/stop (→ MIXES shelf) |
 | `M` | automix: sync + 8-bar auto-crossfade | | |
+| `A` / `S` / `D` | deck A: echo out / brake / backspin | `J` / `K` / `L` | deck B: echo out / brake / backspin |
 | `H` | toggle hand-tracking | `V` | toggle Classic ⇄ Holo |
 | `?` | in-app control cheat sheet | `Esc` | close overlay |
 

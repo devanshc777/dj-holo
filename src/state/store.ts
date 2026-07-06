@@ -154,9 +154,26 @@ export const useStore = create<AppState>((set, get) => ({
           case 'seek':
             d.seek((e.value ?? 0) * d.duration());
             break;
+          case 'brake':
+            d.brake();
+            break;
+          case 'backspin':
+            d.backspin();
+            break;
+          case 'echoOut':
+            d.echoOut();
+            break;
         }
         decks[e.deck] = { ...decks[e.deck], playing: d.playing };
         set({ decks });
+        // exit FX finish async — resync the playing flag once they land
+        if (e.action === 'brake' || e.action === 'backspin') {
+          setTimeout(() => {
+            const ds = [...get().decks] as [DeckUI, DeckUI];
+            ds[e.deck] = { ...ds[e.deck], playing: engine.deck(e.deck).playing };
+            set({ decks: ds });
+          }, 1700);
+        }
         break;
       }
       case 'param': {

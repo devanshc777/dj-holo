@@ -29,6 +29,12 @@ export function bindKeyboard(actions: {
       case '0':
         dispatchControl({ type: 'hotcue', deck: 1, slot: 3, action: ev.shiftKey ? 'set' : 'jump' });
         break;
+      case 'a': dispatchControl({ type: 'deck', deck: 0, action: 'echoOut' }); break;
+      case 's': dispatchControl({ type: 'deck', deck: 0, action: 'brake' }); break;
+      case 'd': dispatchControl({ type: 'deck', deck: 0, action: 'backspin' }); break;
+      case 'j': dispatchControl({ type: 'deck', deck: 1, action: 'echoOut' }); break;
+      case 'k': dispatchControl({ type: 'deck', deck: 1, action: 'brake' }); break;
+      case 'l': dispatchControl({ type: 'deck', deck: 1, action: 'backspin' }); break;
       case 'r': dispatchControl({ type: 'loop', deck: 0, beats: 4 }); break;
       case 't': dispatchControl({ type: 'loop', deck: 0, beats: null }); break;
       case 'y': dispatchControl({ type: 'loop', deck: 1, beats: 4 }); break;

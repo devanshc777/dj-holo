@@ -42,4 +42,12 @@ export class FxChain {
   setBpm(bpm: number | null) {
     if (bpm) this.delay.delayTime.setTargetAtTime(((60 / bpm) * 3) / 4, 0, 0.05);
   }
+
+  setFeedback(v: number) {
+    this.feedback.gain.setTargetAtTime(Math.min(0.95, Math.max(0, v)), 0, 0.02);
+  }
+
+  feedbackValue() {
+    return this.feedback.gain.value;
+  }
 }

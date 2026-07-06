@@ -17,6 +17,8 @@ const SECTIONS: { title: string; rows: [string, string][] }[] = [
       ['1–4 / 7–0', 'hot cues A / B (shift = set)'],
       ['R / T', 'loop 4 · off (deck A)'],
       ['Y / U', 'loop 4 · off (deck B)'],
+      ['A / S / D', 'deck A: echo out · brake · backspin'],
+      ['J / K / L', 'deck B: echo out · brake · backspin'],
     ],
   },
   {
