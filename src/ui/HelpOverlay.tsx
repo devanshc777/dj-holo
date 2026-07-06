@@ -30,9 +30,17 @@ const SECTIONS: { title: string; rows: [string, string][] }[] = [
   {
     title: 'Modes',
     rows: [
-      ['V', 'classic ⇄ holo'],
+      ['V', 'classic → cam → holo'],
       ['H', 'hand-tracking on/off'],
       ['?', 'this help'],
+    ],
+  },
+  {
+    title: 'Cam mode (AR touch)',
+    rows: [
+      ['fingertip', 'cursor (per hand)'],
+      ['pinch', 'click button / grab slider or jog'],
+      ['pinch + move', 'drag fader · scratch · seek'],
     ],
   },
   {

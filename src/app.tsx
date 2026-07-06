@@ -9,25 +9,38 @@ import { MixerPanel } from './ui/MixerPanel';
 import { Library } from './ui/Library';
 import { HelpOverlay } from './ui/HelpOverlay';
 import { WaveformCanvas } from './ui/WaveformCanvas';
+import { CamLayer } from './ui/CamLayer';
+import { bindTouchCursor } from './control/touchCursor';
 
 const HoloScene = lazy(() => import('./holo/HoloScene'));
 
 function HandCursors() {
   const points = useStore((s) => s.handPoints);
+  const uiMode = useStore((s) => s.uiMode);
   return (
     <>
-      {points.map((p) => (
-        <div
-          key={p.deck}
-          className={`hand-cursor deck-${p.deck} pose-${p.pose}`}
-          style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
-        >
-          {p.pose === 'pinch' ? '◉' : p.pose === 'fist' ? '✊' : p.pose === 'point' ? '☝' : '✋'}
-        </div>
-      ))}
+      {points.map((p) =>
+        uiMode === 'cam' ? (
+          <div
+            key={p.deck}
+            className={`touch-cursor deck-${p.deck} ${p.pinch ? 'pinched' : ''}`}
+            style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
+          />
+        ) : (
+          <div
+            key={p.deck}
+            className={`hand-cursor deck-${p.deck} pose-${p.pose}`}
+            style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
+          >
+            {p.pose === 'pinch' ? '◉' : p.pose === 'fist' ? '✊' : p.pose === 'point' ? '☝' : '✋'}
+          </div>
+        ),
+      )}
     </>
   );
 }
+
+const MODE_CYCLE = { classic: 'cam', cam: 'holo', holo: 'classic' } as const;
 
 export function App() {
   const uiMode = useStore((s) => s.uiMode);
@@ -65,18 +78,23 @@ export function App() {
       toggleRecord,
       toggleUiMode: () => {
         const s = useStore.getState();
-        s.setUiMode(s.uiMode === 'classic' ? 'holo' : 'classic');
+        s.setUiMode(MODE_CYCLE[s.uiMode]);
       },
     });
     void bindMidi();
-    return unbind;
+    const untouch = bindTouchCursor();
+    return () => {
+      unbind();
+      untouch();
+    };
   }, [toggleHands, toggleRecord]);
 
   return (
     <div className="app">
       <TopBar onToggleHands={toggleHands} onToggleRecord={toggleRecord} />
-      {uiMode === 'classic' ? (
-        <main className="classic">
+      {uiMode === 'cam' && <CamLayer />}
+      {uiMode !== 'holo' ? (
+        <main className={`classic ${uiMode === 'cam' ? 'cam-mode' : ''}`}>
           <div className="wave-stack">
             <WaveformCanvas deck={0} />
             <WaveformCanvas deck={1} />

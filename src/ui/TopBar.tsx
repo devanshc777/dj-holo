@@ -38,9 +38,11 @@ export function TopBar({
         dj<span className="accent">-holo</span>
       </h1>
       <div className="topbar-controls">
-        <button className={uiMode === 'holo' ? 'active' : ''} onClick={() => setUiMode(uiMode === 'holo' ? 'classic' : 'holo')}>
-          {uiMode === 'holo' ? 'CLASSIC' : 'HOLO'} (V)
-        </button>
+        {(['classic', 'cam', 'holo'] as const).map((m) => (
+          <button key={m} className={uiMode === m ? 'active' : ''} onClick={() => setUiMode(m)}>
+            {m.toUpperCase()}
+          </button>
+        ))}
         <button className={handsStatus !== 'off' ? 'active' : ''} onClick={onToggleHands}>
           <span className={`dot ${dot}`} /> HANDS (H)
         </button>

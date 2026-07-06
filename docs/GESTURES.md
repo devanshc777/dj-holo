@@ -1,5 +1,22 @@
 # Control Reference — Gestures · Keyboard · MIDI
 
+## Cam mode (AR touch overlay)
+
+`V` cycles Classic → **Cam** → Holo. In Cam mode the UI floats over your mirrored camera feed and
+gesture mappings switch off — your **index fingertip is a cursor per hand** (cyan = left/deck A,
+magenta = right/deck B) and **pinch = touch**:
+
+| Action | How |
+|---|---|
+| Click any button / pad | move fingertip over it, pinch once |
+| Drag any slider (EQ, volume, pitch, crossfader) | pinch on it, move while pinched, release |
+| Seek waveform | pinch on the position |
+| Scratch jog | pinch on the disc, rotate while pinched |
+
+Implementation: `src/control/touchCursor.ts` synthesizes real DOM events, so every control works
+without special cases. Tuning (pinch thresholds, smoothing) shared with gesture mode in
+`src/control/hands/config.ts`.
+
 ## Hand gestures (webcam)
 
 Handedness decides the deck: **left hand → Deck A, right hand → Deck B** (mirrored view handled internally). Either hand can work the crossfader.

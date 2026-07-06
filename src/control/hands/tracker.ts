@@ -124,12 +124,19 @@ export class HandTracker {
 
   private processHand(deck: DeckId, lm: Pt[], t: number, points: HandPoint[]) {
     const h = this.hands[deck];
-    const wrist = lm[LM.WRIST];
+    const tip = lm[LM.INDEX_TIP];
     // mirror x so movement matches what the user sees
-    const p = h.filter.filter(1 - wrist.x, wrist.y, t);
+    const p = h.filter.filter(1 - tip.x, tip.y, t);
     const events = h.recognizer.update(lm, t);
     const pose = h.recognizer.pose;
-    points.push({ x: p.x, y: p.y, deck, pose });
+    points.push({ x: p.x, y: p.y, deck, pose, pinch: pose === 'pinch' });
+
+    // cam mode: hands are a touch cursor — pinch clicks UI directly,
+    // classic gesture mappings would fight it, so they're off
+    if (useStore.getState().uiMode === 'cam') {
+      engine.resume();
+      return;
+    }
 
     for (const ev of events) {
       if (ev.kind === 'fistHold') dispatchControl({ type: 'deck', deck, action: 'toggle' });

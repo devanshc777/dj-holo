@@ -4,6 +4,7 @@ Browser DJ rig with three faces over one audio engine:
 
 - **Classic mode** — dual decks, mixer, EQ, FX, loops, hot cues, waveforms. Mouse, touch, keyboard, MIDI.
 - **Hand-tracking** — webcam + MediaPipe. Pinch, fist, point: your hands are the controller. No extra hardware.
+- **Cam mode (AR overlay)** — the whole interface floats over your live camera feed; your fingertip is a cursor and **pinch = touch**. Click buttons, drag faders, scratch jogs — directly on the video of yourself.
 - **Holo mode** — pseudo-holographic 3D interface (react-three-fiber) with audio-reactive shaders; your tracked hand floats in the scene as a cursor.
 
 100% client-side. No backend, no accounts, no uploads — audio never leaves your machine.

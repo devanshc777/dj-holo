@@ -36,7 +36,11 @@ export function JogWheel({ deck }: { deck: DeckId }) {
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (!useStore.getState().decks[deck].trackName) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* synthetic pointer (touch cursor) has no active pointer to capture */
+    }
     const d = engine.deck(deck);
     drag.current = { lastAngle: angleAt(e), wasPlaying: d.playing, lastSeek: 0 };
     if (d.playing) d.pause();

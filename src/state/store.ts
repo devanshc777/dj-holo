@@ -32,17 +32,18 @@ export interface LibraryTrack {
 }
 
 export interface HandPoint {
-  x: number;
+  x: number; // index fingertip, mirrored + smoothed, 0..1
   y: number;
   deck: DeckId;
   pose: string;
+  pinch: boolean;
 }
 
 interface AppState {
   decks: [DeckUI, DeckUI];
   crossfade: number;
   master: number;
-  uiMode: 'classic' | 'holo';
+  uiMode: 'classic' | 'holo' | 'cam';
   handsStatus: HandsStatus;
   handPoints: HandPoint[]; // smoothed cursor per tracked hand (for overlays/holo)
   recording: boolean;
@@ -57,7 +58,7 @@ interface AppState {
   removeFromLibrary: (id: string) => void;
   setHelpOpen: (v: boolean) => void;
   trackLoaded: (deck: DeckId, info: TrackInfo) => void;
-  setUiMode: (m: 'classic' | 'holo') => void;
+  setUiMode: (m: 'classic' | 'holo' | 'cam') => void;
   setHandsStatus: (s: HandsStatus) => void;
   setHandPoints: (p: HandPoint[]) => void;
   setRecording: (r: boolean) => void;
@@ -216,3 +217,8 @@ export const useStore = create<AppState>((set, get) => ({
 
 /** Single entry point every input adapter uses. */
 export const dispatchControl = (e: ControlEvent) => useStore.getState().dispatch(e);
+
+// dev console access for debugging / simulating hand input
+if (import.meta.env.DEV) {
+  (window as unknown as Record<string, unknown>).__djstore = useStore;
+}
