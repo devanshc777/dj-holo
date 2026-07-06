@@ -1,7 +1,8 @@
 import { Deck } from './deck';
 import { Mixer } from './mixer';
+import { Sampler } from './sampler';
 import { computePeaks, detectBPM } from './analysis';
-import { tempoValueToRate } from './math';
+import { beatsToSeconds, tempoValueToRate } from './math';
 
 export interface TrackInfo {
   name: string;
@@ -19,6 +20,7 @@ export type DeckParam = 'tempo' | 'volume' | 'eqLow' | 'eqMid' | 'eqHigh' | 'fxW
  */
 export class Engine {
   readonly ctx: AudioContext;
+  readonly sampler: Sampler;
   private decks: [Deck, Deck];
   private mixer: Mixer;
   private tempoValue: [number, number] = [0.5, 0.5];
@@ -32,6 +34,14 @@ export class Engine {
       new Deck(this.ctx, this.mixer.deckBus(0)),
       new Deck(this.ctx, this.mixer.deckBus(1)),
     ];
+    this.sampler = new Sampler(this.ctx, this.mixer.master);
+  }
+
+  /** Capture `beats` of deck `i` starting at its playhead into a sampler pad. */
+  captureToPad(slot: number, i: 0 | 1): boolean {
+    const d = this.decks[i];
+    if (!d.buffer || !d.bpm) return false;
+    return this.sampler.capture(slot, d.buffer, d.playhead(), beatsToSeconds(2, d.bpm));
   }
 
   deck(i: 0 | 1): Deck {

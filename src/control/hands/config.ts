@@ -1,8 +1,11 @@
 /** Every hand-tracking threshold lives here. Tune here, nowhere else. */
 export const handsConfig = {
-  /** thumb-index tip distance (normalized) to enter/exit pinch — gap = hysteresis */
-  pinchEnter: 0.055,
-  pinchExit: 0.085,
+  /**
+   * Pinch thresholds as a RATIO of hand span (wrist → middle knuckle), so
+   * detection works at any distance from the camera. Gap = hysteresis.
+   */
+  pinchEnterRatio: 0.4,
+  pinchExitRatio: 0.6,
   /** fingertip-to-wrist vs knuckle-to-wrist ratio below which a finger counts as curled */
   curlRatio: 1.12,
   /** ms a fist must hold before it fires play/pause */

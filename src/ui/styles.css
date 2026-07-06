@@ -563,6 +563,50 @@ input[type='range'] {
   color: var(--a);
 }
 
+/* ── sampler pads ── */
+.sampler {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.sampler-label {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--dim);
+}
+.spad {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 15px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  justify-content: center;
+  color: var(--dim);
+}
+.spad small {
+  font-size: 9px;
+}
+.spad.filled.deck-0 {
+  color: var(--a);
+  border-color: var(--a);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+.spad.filled.deck-1 {
+  color: var(--b);
+  border-color: var(--b);
+  box-shadow: 0 0 10px rgba(255, 46, 196, 0.3);
+}
+.spad:nth-child(6) {
+  margin-left: 14px; /* visual split: left 4 = deck A, right 4 = deck B */
+}
+.sampler-hint {
+  font-size: 10px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
 /* ── compare ── */
 .compare {
   border-top: 1px solid var(--line);
@@ -734,6 +778,23 @@ input[type='range'] {
 .touch-press {
   border-color: #fff !important;
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.7) !important;
+}
+.touch-hover {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+/* fatter touch targets while in cam mode */
+.cam-mode button,
+.cam-mode .load-btn {
+  padding: 12px 14px;
+  font-size: 14px;
+}
+.cam-mode .pad {
+  padding: 14px 0;
+}
+.cam-mode input[type='range'] {
+  height: 26px;
 }
 
 .touch-cursor {

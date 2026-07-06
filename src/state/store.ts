@@ -51,8 +51,11 @@ interface AppState {
   library: LibraryTrack[];
   analyzing: number; // files currently decoding
   helpOpen: boolean;
+  pads: { filled: boolean; deck: DeckId | null; seconds: number }[];
 
   dispatch: (e: ControlEvent) => void;
+  padAction: (slot: number, deck: DeckId) => void; // empty→capture, filled→trigger
+  padClear: (slot: number) => void;
   addToLibrary: (files: File[]) => Promise<void>;
   loadFromLibrary: (id: string, deck: DeckId) => void;
   removeFromLibrary: (id: string) => void;
@@ -94,6 +97,30 @@ export const useStore = create<AppState>((set, get) => ({
   library: [],
   analyzing: 0,
   helpOpen: false,
+  pads: Array.from({ length: 8 }, () => ({ filled: false, deck: null, seconds: 0 })),
+
+  padAction: (slot, deck) => {
+    engine.resume();
+    const pads = [...get().pads];
+    if (!pads[slot].filled) {
+      if (engine.captureToPad(slot, deck)) {
+        pads[slot] = { filled: true, deck, seconds: engine.sampler.pad(slot).seconds };
+        set({ pads });
+        get().showToast(`pad ${slot + 1} sampled 2 beats from deck ${deck === 0 ? 'A' : 'B'}`);
+      } else {
+        get().showToast(`deck ${deck === 0 ? 'A' : 'B'} needs a loaded track (with BPM) to sample`);
+      }
+    } else {
+      engine.sampler.trigger(slot);
+    }
+  },
+
+  padClear: (slot) => {
+    engine.sampler.clear(slot);
+    const pads = [...get().pads];
+    pads[slot] = { filled: false, deck: null, seconds: 0 };
+    set({ pads });
+  },
 
   addToLibrary: async (files) => {
     const { detectBPM } = await import('../engine/analysis');

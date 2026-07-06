@@ -10,7 +10,9 @@ import { Library } from './ui/Library';
 import { HelpOverlay } from './ui/HelpOverlay';
 import { WaveformCanvas } from './ui/WaveformCanvas';
 import { CamLayer } from './ui/CamLayer';
+import { SamplerPads } from './ui/SamplerPads';
 import { bindTouchCursor } from './control/touchCursor';
+import { mapCamToViewport } from './control/camMap';
 
 const HoloScene = lazy(() => import('./holo/HoloScene'));
 
@@ -24,7 +26,10 @@ function HandCursors() {
           <div
             key={p.deck}
             className={`touch-cursor deck-${p.deck} ${p.pinch ? 'pinched' : ''}`}
-            style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
+            style={(() => {
+              const m = mapCamToViewport(p.x, p.y);
+              return { left: m.x, top: m.y };
+            })()}
           />
         ) : (
           <div
@@ -99,6 +104,7 @@ export function App() {
             <WaveformCanvas deck={0} />
             <WaveformCanvas deck={1} />
           </div>
+          <SamplerPads />
           <div className="deck-row">
             <DeckPanel deck={0} />
             <MixerPanel />

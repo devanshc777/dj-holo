@@ -39,8 +39,13 @@ function extended(lm: Pt[], tip: number, mcp: number): boolean {
 export function detectPose(lm: Pt[], pinched: boolean): Pose {
   if (lm.length < 21) return 'none';
 
-  const pinchDist = dist(lm[LM.THUMB_TIP], lm[LM.INDEX_TIP]);
-  const pinchNow = pinched ? pinchDist < handsConfig.pinchExit : pinchDist < handsConfig.pinchEnter;
+  // scale-invariant: everything relative to hand span, so distance from the
+  // camera doesn't change what counts as a pinch
+  const span = dist(lm[LM.WRIST], lm[LM.MIDDLE_MCP]) || 1e-6;
+  const pinchRatio = dist(lm[LM.THUMB_TIP], lm[LM.INDEX_TIP]) / span;
+  const pinchNow = pinched
+    ? pinchRatio < handsConfig.pinchExitRatio
+    : pinchRatio < handsConfig.pinchEnterRatio;
   if (pinchNow) return 'pinch';
 
   const idx = extended(lm, LM.INDEX_TIP, LM.INDEX_MCP);

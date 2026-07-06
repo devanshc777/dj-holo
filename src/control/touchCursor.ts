@@ -1,5 +1,6 @@
 import { useStore, HandPoint } from '../state/store';
 import { DeckId } from './events';
+import { mapCamToViewport } from './camMap';
 
 /**
  * Cam-mode touch layer: each tracked fingertip is a cursor; pinch acts as
@@ -16,11 +17,12 @@ type DragTarget =
 interface CursorState {
   pinched: boolean;
   drag: DragTarget;
+  hover: Element | null;
 }
 
 const cursors: Record<DeckId, CursorState> = {
-  0: { pinched: false, drag: null },
-  1: { pinched: false, drag: null },
+  0: { pinched: false, drag: null, hover: null },
+  1: { pinched: false, drag: null, hover: null },
 };
 
 const nativeValueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!;
@@ -83,24 +85,41 @@ function release(x: number, y: number, deck: DeckId) {
   if (d?.kind === 'jog') d.el.dispatchEvent(pointerEvent('pointerup', x, y, deck));
 }
 
+/** Aim assist: highlight the interactive element under an unpinched cursor. */
+function updateHover(x: number, y: number, deck: DeckId) {
+  const c = cursors[deck];
+  const el = document.elementFromPoint(x, y)?.closest('button, .load-btn, input[type="range"], label, .jog, canvas') ?? null;
+  if (el !== c.hover) {
+    c.hover?.classList.remove('touch-hover');
+    el?.classList.add('touch-hover');
+    c.hover = el;
+  }
+}
+
 /** Feed one frame of hand points (call only in cam mode). */
 export function touchFrame(points: HandPoint[]) {
   const seen = new Set<DeckId>();
   for (const p of points) {
     seen.add(p.deck);
-    const x = p.x * window.innerWidth;
-    const y = p.y * window.innerHeight;
+    const m = mapCamToViewport(p.x, p.y);
+    const x = m.x;
+    const y = m.y;
     const c = cursors[p.deck];
     if (p.pinch && !c.pinched) press(x, y, p.deck);
     else if (p.pinch && c.pinched) move(x, y, p.deck);
     else if (!p.pinch && c.pinched) release(x, y, p.deck);
+    if (!p.pinch) updateHover(x, y, p.deck);
     c.pinched = p.pinch;
   }
-  // hand vanished mid-pinch → release
+  // hand vanished mid-pinch → release; clear stale hover
   ([0, 1] as DeckId[]).forEach((d) => {
-    if (!seen.has(d) && cursors[d].pinched) {
-      release(window.innerWidth / 2, window.innerHeight / 2, d);
-      cursors[d].pinched = false;
+    if (!seen.has(d)) {
+      if (cursors[d].pinched) {
+        release(window.innerWidth / 2, window.innerHeight / 2, d);
+        cursors[d].pinched = false;
+      }
+      cursors[d].hover?.classList.remove('touch-hover');
+      cursors[d].hover = null;
     }
   });
 }
