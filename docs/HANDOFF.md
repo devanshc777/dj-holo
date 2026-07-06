@@ -48,6 +48,7 @@ Manual smoke (needs human — audio + camera aren't automated):
 | New input device (Leap, depth cam, OSC) | new adapter in `src/control/` emitting ControlEvents. Touch nothing else. |
 | New gesture | add recognizer fn in `hands/gestures.ts` + mapping in `hands/tracker.ts`; thresholds → `hands/config.ts`; add fixture test |
 | New FX | extend chain in `src/engine/fx.ts`, expose param via ControlEvent `param` union + store + a knob |
+| Echo-out / vinyl-brake / backspin exits | wanted by `docs/RECIPES.md` — echo-out = freeze delay feedback + cut dry; brake = playbackRate ramp→0; backspin = reversed-buffer burst |
 | Vendor MIDI profile | mapping table in `src/control/midi.ts` |
 | 4 decks | `Engine` holds `Deck[]` — mostly UI work + crossfader→matrix mixer |
 | True holographic hardware | input side: depth-camera adapter; output side: the holo scene already renders to any display — a "pepper's ghost" pyramid or holo fan just mirrors the canvas |
