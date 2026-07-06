@@ -11,11 +11,21 @@ Browser DJ rig with three faces over one audio engine:
 
 ## Quick start
 
+One command (handles install + demo tracks + opens browser):
+
+```powershell
+.\start.ps1
+```
+
+Or manually:
+
 ```bash
 npm install
 npm run gen:demos   # synthesizes royalty-free demo loops into public/demo-tracks/
 npm run dev         # http://localhost:5199
 ```
+
+`start.ps1` has a clearly marked block to paste your own extra startup commands.
 
 Load a demo track on each deck (or drag-drop your own MP3/WAV/FLAC), hit play, enable the camera, raise your fist. You're DJing.
 
