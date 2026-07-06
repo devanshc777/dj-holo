@@ -30,6 +30,8 @@ Load a demo track on each deck (or drag-drop your own MP3/WAV/FLAC), hit play, e
 | Analysis | auto BPM detection, one-tap beat sync, peak waveforms with playhead |
 | Automix | `M` — beat-sync incoming deck + smooth 8-bar crossfade, outgoing deck auto-pauses |
 | Recording | record master bus → saved to in-app MIXES shelf (IndexedDB): play back, download `.webm`, delete |
+| Exit FX | echo out (`A`/`J`), vinyl brake (`S`/`K`), backspin (`D`/`L`) — one-button pro exits |
+| Compare | analyze any two sounds (tracks or recorded mixes): structure arc, tonal balance, band shape, BPM Δ — check your reproduction against a reference |
 | Inputs | mouse/touch, keyboard, Web MIDI (Chrome/Edge), MediaPipe hand gestures |
 
 ## Controls
