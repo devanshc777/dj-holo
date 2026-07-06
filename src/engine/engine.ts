@@ -119,7 +119,7 @@ export class Engine {
   }
 
   /** Frequency-domain snapshot of the master bus (for visuals). */
-  getFFT(out: Uint8Array) {
+  getFFT(out: Uint8Array<ArrayBuffer>) {
     this.mixer.analyser.getByteFrequencyData(out);
   }
 
