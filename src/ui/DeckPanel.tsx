@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
 import { dispatchControl, useStore } from '../state/store';
 import { DeckId } from '../control/events';
-import { WaveformCanvas } from './WaveformCanvas';
-import { loadTrackFile, loadDemoTrack } from './loadTrack';
+import { JogWheel } from './JogWheel';
+import { loadTrackFile } from './loadTrack';
 
-const DEMOS: Record<DeckId, { url: string; name: string }> = {
-  0: { url: '/demo-tracks/neon-drive-120.wav', name: 'Neon Drive (120)' },
-  1: { url: '/demo-tracks/pulse-grid-128.wav', name: 'Pulse Grid (128)' },
+const KEYS: Record<DeckId, { play: string; cue: string; sync: string }> = {
+  0: { play: 'Q', cue: 'W', sync: 'E' },
+  1: { play: 'P', cue: 'O', sync: 'I' },
 };
 
 export function DeckPanel({ deck }: { deck: DeckId }) {
   const d = useStore((s) => s.decks[deck]);
+  const k = KEYS[deck];
 
   const onDrop = useCallback(
     (e: React.DragEvent) => {
@@ -33,34 +34,42 @@ export function DeckPanel({ deck }: { deck: DeckId }) {
   const set = (param: 'tempo' | 'fxWet' | 'filter') => (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatchControl({ type: 'param', deck, param, value: Number(e.target.value) });
 
+  const tempoPct = ((d.tempo - 0.5) * 16).toFixed(1);
+
   return (
     <section className={`deck deck-${deck}`} onDrop={onDrop} onDragOver={(e) => e.preventDefault()}>
       <header className="deck-head">
         <span className="deck-label">{deck === 0 ? 'A' : 'B'}</span>
-        <span className="track-name">{d.trackName ?? 'drop a track / load demo'}</span>
-        <span className="bpm">{d.bpm ? `${d.bpm} BPM` : '—'}</span>
+        <span className="track-name">{d.trackName ?? 'no track loaded'}</span>
+        <span className="bpm">{d.bpm ? `${(d.bpm * (0.92 + d.tempo * 0.16)).toFixed(1)} BPM` : '—'}</span>
       </header>
 
-      <WaveformCanvas deck={deck} />
+      <div className="deck-body">
+        {deck === 1 && <PitchColumn value={d.tempo} pct={tempoPct} onChange={set('tempo')} />}
+        <JogWheel deck={deck} />
+        {deck === 0 && <PitchColumn value={d.tempo} pct={tempoPct} onChange={set('tempo')} />}
+      </div>
 
       <div className="row transport">
-        <button className={d.playing ? 'active' : ''} onClick={() => dispatchControl({ type: 'deck', deck, action: 'toggle' })}>
-          {d.playing ? '❚❚' : '▶'}
+        <button
+          className={`play ${d.playing ? 'active' : ''}`}
+          onClick={() => dispatchControl({ type: 'deck', deck, action: 'toggle' })}
+        >
+          {d.playing ? '❚❚' : '▶'} <kbd>{k.play}</kbd>
         </button>
-        <button onClick={() => dispatchControl({ type: 'deck', deck, action: 'cue' })}>CUE</button>
-        <button onClick={() => dispatchControl({ type: 'deck', deck, action: 'sync' })}>SYNC</button>
+        <button onClick={() => dispatchControl({ type: 'deck', deck, action: 'cue' })}>
+          CUE <kbd>{k.cue}</kbd>
+        </button>
+        <button onClick={() => dispatchControl({ type: 'deck', deck, action: 'sync' })}>
+          SYNC <kbd>{k.sync}</kbd>
+        </button>
         <label className="load-btn">
           LOAD
           <input type="file" accept="audio/*" onChange={onPick} hidden />
         </label>
-        <button onClick={() => void loadDemoTrack(deck, DEMOS[deck].url, DEMOS[deck].name)}>DEMO</button>
       </div>
 
-      <div className="row">
-        <label className="slider-label">
-          tempo
-          <input type="range" min={0} max={1} step={0.001} value={d.tempo} onChange={set('tempo')} />
-        </label>
+      <div className="row fx-row">
         <label className="slider-label">
           filter
           <input type="range" min={0} max={1} step={0.001} value={d.filter} onChange={set('filter')} />
@@ -77,12 +86,7 @@ export function DeckPanel({ deck }: { deck: DeckId }) {
             key={slot}
             className={`pad ${d.hotcues[slot] !== null ? 'set' : ''}`}
             onClick={() =>
-              dispatchControl({
-                type: 'hotcue',
-                deck,
-                slot,
-                action: d.hotcues[slot] === null ? 'set' : 'jump',
-              })
+              dispatchControl({ type: 'hotcue', deck, slot, action: d.hotcues[slot] === null ? 'set' : 'jump' })
             }
             onContextMenu={(e) => {
               e.preventDefault();
@@ -104,5 +108,31 @@ export function DeckPanel({ deck }: { deck: DeckId }) {
         ))}
       </div>
     </section>
+  );
+}
+
+function PitchColumn({
+  value,
+  pct,
+  onChange,
+}: {
+  value: number;
+  pct: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div className="pitch-col">
+      <span className="pitch-pct">{Number(pct) > 0 ? `+${pct}` : pct}%</span>
+      <input
+        type="range"
+        className="pitch-fader"
+        min={0}
+        max={1}
+        step={0.001}
+        value={value}
+        onChange={onChange}
+      />
+      <span className="pitch-word">pitch</span>
+    </div>
   );
 }

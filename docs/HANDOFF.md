@@ -10,6 +10,7 @@ Built in one session, phases per `docs/superpowers/plans/2026-07-06-dj-holo.md`:
 - ✅ Controls: ControlEvent bus, keyboard, Web MIDI, MediaPipe hand gestures (recognizer unit-tested on landmark fixtures)
 - ✅ Classic UI + Holo UI (toggle with `V`)
 - ✅ Demo track generator (`npm run gen:demos`)
+- ✅ v2 UI (same day): youdj-style layout — stacked full-width waveforms, scratchable vinyl jog wheels (pointer-drag = scrub, pauses while held), vertical pitch faders, bottom library (multi-upload, BPM analysis, load-to-deck), `?` hotkey help overlay, Unbounded/Chakra Petch typography. Recording verified end-to-end (downloaded webm during browser smoke).
 
 ## Verify it works
 

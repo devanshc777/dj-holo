@@ -6,6 +6,9 @@ import { handTracker } from './control/hands/tracker';
 import { TopBar } from './ui/TopBar';
 import { DeckPanel } from './ui/DeckPanel';
 import { MixerPanel } from './ui/MixerPanel';
+import { Library } from './ui/Library';
+import { HelpOverlay } from './ui/HelpOverlay';
+import { WaveformCanvas } from './ui/WaveformCanvas';
 
 const HoloScene = lazy(() => import('./holo/HoloScene'));
 
@@ -78,9 +81,16 @@ export function App() {
       <TopBar onToggleHands={toggleHands} onToggleRecord={toggleRecord} />
       {uiMode === 'classic' ? (
         <main className="classic">
-          <DeckPanel deck={0} />
-          <MixerPanel />
-          <DeckPanel deck={1} />
+          <div className="wave-stack">
+            <WaveformCanvas deck={0} />
+            <WaveformCanvas deck={1} />
+          </div>
+          <div className="deck-row">
+            <DeckPanel deck={0} />
+            <MixerPanel />
+            <DeckPanel deck={1} />
+          </div>
+          <Library />
         </main>
       ) : (
         <Suspense fallback={<div className="holo-loading">entering the hologram…</div>}>
@@ -88,6 +98,7 @@ export function App() {
         </Suspense>
       )}
       <HandCursors />
+      <HelpOverlay />
       {toast && <div className="toast">{toast}</div>}
     </div>
   );

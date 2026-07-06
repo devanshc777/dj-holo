@@ -47,6 +47,7 @@ export function TopBar({
         <button className={recording ? 'rec active' : 'rec'} onClick={onToggleRecord}>
           {recording ? '■ STOP' : '● REC'} (Space)
         </button>
+        <button onClick={() => useStore.getState().setHelpOpen(!useStore.getState().helpOpen)}>? KEYS</button>
       </div>
       <div ref={previewRef} className="cam-slot" />
     </header>

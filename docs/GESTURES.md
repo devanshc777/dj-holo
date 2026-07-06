@@ -28,6 +28,11 @@ Handedness decides the deck: **left hand → Deck A, right hand → Deck B** (mi
 | `R` / `T` | Deck A loop 4 / off | `Y` / `U` | Deck B loop 4 / off |
 | `Z` / `X` | crossfader nudge left/right | `Space` | record start/stop |
 | `H` | toggle hand-tracking | `V` | toggle Classic ⇄ Holo |
+| `?` | in-app control cheat sheet | `Esc` | close overlay |
+
+## Mouse
+
+Everything is mouse-operable: drag jog wheels to scratch/scrub (pauses while held, resumes on release), click waveforms to seek, sliders for EQ/volume/pitch/FX/crossfader, pads for cues/loops, library buttons to load decks.
 
 ## MIDI (Chrome/Edge)
 

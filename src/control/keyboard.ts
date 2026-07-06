@@ -37,6 +37,12 @@ export function bindKeyboard(actions: {
       case ' ': ev.preventDefault(); actions.toggleRecord(); break;
       case 'h': actions.toggleHands(); break;
       case 'v': actions.toggleUiMode(); break;
+      case '?': case '/': {
+        const s = useStore.getState();
+        s.setHelpOpen(!s.helpOpen);
+        break;
+      }
+      case 'escape': useStore.getState().setHelpOpen(false); break;
     }
   };
   window.addEventListener('keydown', onKey);

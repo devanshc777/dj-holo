@@ -44,6 +44,18 @@ export class Engine {
     return this.loadDecoded(i, name, buffer);
   }
 
+  /** Decode without loading to a deck (library analysis). */
+  async decode(data: ArrayBuffer): Promise<AudioBuffer> {
+    return this.ctx.decodeAudioData(data);
+  }
+
+  /** Load an analyzed library track onto a deck. */
+  loadTrack(i: 0 | 1, name: string, buffer: AudioBuffer, bpm: number | null): TrackInfo {
+    const peaks = computePeaks(buffer);
+    this.decks[i].load(buffer, bpm);
+    return { name, bpm, duration: buffer.duration, peaks };
+  }
+
   /** Load an already-decoded buffer (tests, demo generator). */
   loadBuffer(i: 0 | 1, buffer: AudioBuffer, bpm: number | null): void {
     this.decks[i].load(buffer, bpm);

@@ -22,7 +22,8 @@ Load a demo track on each deck (or drag-drop your own MP3/WAV/FLAC), hit play, e
 
 | Area | What you get |
 |---|---|
-| Decks ×2 | play/pause, cue, seek, tempo ±8%, beat loops (1/2/4/8), 4 hot cues |
+| Decks ×2 | spinning vinyl jog wheels (drag to scratch/scrub), play/pause, cue, seek, pitch ±8%, beat loops (1/2/4/8), 4 hot cues |
+| Library | multi-file upload / drag-drop, auto BPM analysis, one-click load to deck A/B |
 | Mixer | 3-band EQ per deck (full kill → +6 dB), channel volume, equal-power crossfader, master |
 | FX | per-deck send: filter → tempo-synced delay w/ feedback |
 | Analysis | auto BPM detection, one-tap beat sync, peak waveforms with playhead |
@@ -31,7 +32,7 @@ Load a demo track on each deck (or drag-drop your own MP3/WAV/FLAC), hit play, e
 
 ## Controls
 
-Full gesture + keyboard + MIDI map: [`docs/GESTURES.md`](docs/GESTURES.md).
+Full gesture + keyboard + MIDI map: [`docs/GESTURES.md`](docs/GESTURES.md) — or press `?` in the app.
 Cheat sheet: left hand = Deck A, right hand = Deck B. **Pinch+drag ↕** volume · **pinch+drag ↔** tempo · **fist (hold)** play/pause · **two-finger point ↔** crossfader · **open palm height** FX.
 
 ## Scripts

@@ -23,6 +23,14 @@ export interface DeckUI {
 
 export type HandsStatus = 'off' | 'starting' | 'no-hands' | 'tracking' | 'error';
 
+export interface LibraryTrack {
+  id: string;
+  name: string;
+  buffer: AudioBuffer;
+  bpm: number | null;
+  duration: number;
+}
+
 export interface HandPoint {
   x: number;
   y: number;
@@ -39,8 +47,15 @@ interface AppState {
   handPoints: HandPoint[]; // smoothed cursor per tracked hand (for overlays/holo)
   recording: boolean;
   toast: string | null;
+  library: LibraryTrack[];
+  analyzing: number; // files currently decoding
+  helpOpen: boolean;
 
   dispatch: (e: ControlEvent) => void;
+  addToLibrary: (files: File[]) => Promise<void>;
+  loadFromLibrary: (id: string, deck: DeckId) => void;
+  removeFromLibrary: (id: string) => void;
+  setHelpOpen: (v: boolean) => void;
   trackLoaded: (deck: DeckId, info: TrackInfo) => void;
   setUiMode: (m: 'classic' | 'holo') => void;
   setHandsStatus: (s: HandsStatus) => void;
@@ -75,6 +90,42 @@ export const useStore = create<AppState>((set, get) => ({
   handPoints: [],
   recording: false,
   toast: null,
+  library: [],
+  analyzing: 0,
+  helpOpen: false,
+
+  addToLibrary: async (files) => {
+    const { detectBPM } = await import('../engine/analysis');
+    for (const file of files) {
+      set((s) => ({ analyzing: s.analyzing + 1 }));
+      try {
+        engine.resume();
+        const buffer = await engine.decode(await file.arrayBuffer());
+        const track: LibraryTrack = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          name: file.name.replace(/\.[^.]+$/, ''),
+          buffer,
+          bpm: detectBPM(buffer),
+          duration: buffer.duration,
+        };
+        set((s) => ({ library: [...s.library, track] }));
+      } catch {
+        get().showToast(`Couldn't decode ${file.name}`);
+      } finally {
+        set((s) => ({ analyzing: s.analyzing - 1 }));
+      }
+    }
+  },
+
+  loadFromLibrary: (id, deck) => {
+    const t = get().library.find((x) => x.id === id);
+    if (!t) return;
+    const info = engine.loadTrack(deck, t.name, t.buffer, t.bpm);
+    get().trackLoaded(deck, info);
+  },
+
+  removeFromLibrary: (id) => set((s) => ({ library: s.library.filter((t) => t.id !== id) })),
+  setHelpOpen: (helpOpen) => set({ helpOpen }),
 
   dispatch: (e) => {
     engine.resume();
