@@ -23,7 +23,8 @@ const SECTIONS: { title: string; rows: [string, string][] }[] = [
     title: 'Mix',
     rows: [
       ['Z / X', 'crossfader nudge'],
-      ['Space', 'record start/stop'],
+      ['M', 'automix — sync + 8-bar crossfade'],
+      ['Space', 'record start/stop → MIXES shelf'],
     ],
   },
   {

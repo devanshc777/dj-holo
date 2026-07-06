@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { useStore } from '../state/store';
 import { loadDemoTrack } from './loadTrack';
+import { MixesShelf } from './MixesShelf';
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -74,6 +75,7 @@ export function Library() {
           ))}
         </div>
       )}
+      <MixesShelf />
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import { dispatchControl, useStore } from '../state/store';
 import { DeckId } from '../control/events';
+import { autoMix } from '../control/automix';
 
 function EqColumn({ deck }: { deck: DeckId }) {
   const d = useStore((s) => s.decks[deck]);
@@ -40,6 +41,9 @@ export function MixerPanel() {
         <EqColumn deck={0} />
         <EqColumn deck={1} />
       </div>
+      <button className="automix" onClick={() => useStore.getState().showToast(autoMix())}>
+        ⚡ AUTOMIX <kbd>M</kbd>
+      </button>
       <label className="slider-label xfade">
         crossfader
         <input

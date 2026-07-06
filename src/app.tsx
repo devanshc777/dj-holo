@@ -48,17 +48,13 @@ export function App() {
         showToast('Recording unsupported in this browser');
       }
     } else {
-      void engine.stopRecording().then((blob) => {
-        setRecording(false);
-        if (!blob) return;
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        const d = new Date();
-        const pad = (n: number) => String(n).padStart(2, '0');
-        a.download = `set-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.webm`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-        showToast('Set saved');
+      void engine.stopRecording().then(async (blob) => {
+        if (blob) {
+          const { saveMix } = await import('./state/mixes');
+          const meta = await saveMix(blob);
+          showToast(`${meta.name} saved to MIXES shelf`);
+        }
+        setRecording(false); // after save so the shelf refresh sees the new mix
       });
     }
   }, []);

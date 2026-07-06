@@ -525,6 +525,42 @@ input[type='range'] {
   color: var(--rec);
 }
 
+/* ── automix / mixes ── */
+.automix {
+  border-color: var(--b);
+  color: var(--b);
+}
+.automix:hover {
+  box-shadow: 0 0 14px rgba(255, 46, 196, 0.4);
+}
+.mixes {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mix-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+.mix-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 70px 130px 36px 30px;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: var(--panel2);
+  font-size: 13px;
+}
+.mix-play {
+  padding: 4px;
+  color: var(--a);
+}
+
 /* ── help overlay ── */
 .help-overlay {
   position: fixed;

@@ -1,4 +1,5 @@
 import { dispatchControl, useStore } from '../state/store';
+import { autoMix } from './automix';
 
 /** Keyboard map — see docs/GESTURES.md. Returns an unbind fn. */
 export function bindKeyboard(actions: {
@@ -35,6 +36,7 @@ export function bindKeyboard(actions: {
       case 'z': dispatchControl({ type: 'mixer', param: 'crossfade', value: Math.max(0, xf() - 0.1) }); break;
       case 'x': dispatchControl({ type: 'mixer', param: 'crossfade', value: Math.min(1, xf() + 0.1) }); break;
       case ' ': ev.preventDefault(); actions.toggleRecord(); break;
+      case 'm': useStore.getState().showToast(autoMix()); break;
       case 'h': actions.toggleHands(); break;
       case 'v': actions.toggleUiMode(); break;
       case '?': case '/': {

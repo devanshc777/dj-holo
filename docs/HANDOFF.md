@@ -10,6 +10,7 @@ Built in one session, phases per `docs/superpowers/plans/2026-07-06-dj-holo.md`:
 - ✅ Controls: ControlEvent bus, keyboard, Web MIDI, MediaPipe hand gestures (recognizer unit-tested on landmark fixtures)
 - ✅ Classic UI + Holo UI (toggle with `V`)
 - ✅ Demo track generator (`npm run gen:demos`)
+- ✅ v2.1 (same day): AUTOMIX (`M` / mixer button — sync + smoothstep 8-bar crossfade via `src/control/automix.ts`), MIXES shelf (IndexedDB, `src/state/mixes.ts` + `src/ui/MixesShelf.tsx` — recordings auto-save, play/download/delete). Music pipeline: `music-fetch` skill (`~\.claude\skills\music-fetch\`) downloads audio via yt-vault's yt-dlp → `C:\Personal\inbox\music\`; finished mixes → `C:\Personal\exports\mixes\`. Verified end-to-end with two NCS tracks (download → BPM analysis → automix → record → shelf).
 - ✅ v2 UI (same day): youdj-style layout — stacked full-width waveforms, scratchable vinyl jog wheels (pointer-drag = scrub, pauses while held), vertical pitch faders, bottom library (multi-upload, BPM analysis, load-to-deck), `?` hotkey help overlay, Unbounded/Chakra Petch typography. Recording verified end-to-end (downloaded webm during browser smoke).
 
 ## Verify it works

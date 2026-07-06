@@ -27,7 +27,8 @@ Load a demo track on each deck (or drag-drop your own MP3/WAV/FLAC), hit play, e
 | Mixer | 3-band EQ per deck (full kill → +6 dB), channel volume, equal-power crossfader, master |
 | FX | per-deck send: filter → tempo-synced delay w/ feedback |
 | Analysis | auto BPM detection, one-tap beat sync, peak waveforms with playhead |
-| Recording | record master bus → downloadable `.webm` |
+| Automix | `M` — beat-sync incoming deck + smooth 8-bar crossfade, outgoing deck auto-pauses |
+| Recording | record master bus → saved to in-app MIXES shelf (IndexedDB): play back, download `.webm`, delete |
 | Inputs | mouse/touch, keyboard, Web MIDI (Chrome/Edge), MediaPipe hand gestures |
 
 ## Controls
