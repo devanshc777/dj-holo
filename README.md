@@ -9,6 +9,8 @@ Browser DJ rig with three faces over one audio engine:
 
 100% client-side. No backend, no accounts, no uploads — audio never leaves your machine.
 
+**Live:** https://dj-holo.devanshchowdhary03.workers.dev (demo tracks included; allow the camera for hand-tracking and Cam mode).
+
 ## Quick start
 
 One command (handles install + demo tracks + opens browser):
@@ -57,6 +59,9 @@ Cheat sheet: left hand = Deck A, right hand = Deck B. **Pinch+drag ↕** volume 
 | `npm test` | vitest — engine + gesture unit tests (headless, mocked AudioContext) |
 | `npm run build` | typecheck + production bundle |
 | `npm run gen:demos` | regenerate synthesized demo tracks |
+| `npm run deploy` | build, then `wrangler deploy` to Cloudflare Workers static assets (`wrangler.jsonc`) |
+
+Run `npm run gen:demos` before deploying from a fresh clone: the demo tracks in `public/demo-tracks/` ship with the build.
 
 ## Docs
 

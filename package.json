@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gen:demos": "node scripts/generate-demo-tracks.mjs"
+    "gen:demos": "node scripts/generate-demo-tracks.mjs",
+    "deploy": "npm run build && npx wrangler deploy"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^0.10.14",

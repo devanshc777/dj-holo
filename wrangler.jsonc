@@ -1,0 +1,8 @@
+// Static deploy: the app runs entirely in the browser (Web Audio, MediaPipe, R3F), so the Worker only
+// serves the built client. Camera access needs a secure context, which the workers.dev origin is.
+// Run `npm run deploy`.
+{
+  "name": "dj-holo",
+  "compatibility_date": "2026-11-16",
+  "assets": { "directory": "./dist" }
+}
